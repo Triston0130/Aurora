@@ -18,13 +18,13 @@ Benchmark results (Criterion JSON + Markdown) are written to
 
 | Benchmark | Description |
 | --- | --- |
-| `actor_spawn_join` | Measures supervisor throughput when spawning N actors and awaiting completion. |
-| `zone_handoff` | Times region transfer CPU → GPU → CPU using the zone manager. *(WIP)* |
-| `timer_wheel` | Evaluates timer queue latency under concurrent load. *(WIP)* |
-| `ffi_roundtrip` | Benchmarks FFI boundary calls with capability checks. *(WIP)* |
+| `actor_spawn_join` | Measures supervisor throughput when spawning and joining actor batches. |
+| `zone_handoff` | Times region handle transfers between CPU and GPU regions. |
+| `timer_wheel` | Evaluates scheduling overhead for large batches of zero-delay timers. |
+| `ffi_roundtrip` | Benchmarks repeated FFI calls (`strlen`) through the capability manager. |
 
-Initial implementation focuses on the actor throughput benchmark; additional
-scenarios should extend `benches/`.
+Initial implementation covers the first four scenarios; extend `benches/` as new
+workloads are identified.
 
 ## Safety Checks
 

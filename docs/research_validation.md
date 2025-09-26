@@ -16,8 +16,8 @@ strand. Detailed artefacts live under `research/`.
   `compiler/prototypes` passes.
 - **Proof System:** Lean 4 (preferred) with an alternative Coq path if Lean
   automation proves insufficient.
-- **Artefacts:** See `research/proofs/core_calculus/` for the formalisation plan,
-  semantics, and mechanisation schedule.
+- **Artefacts:** See `research/proofs/core_calculus/` (Lean project scaffold with
+  syntax/typing/reduction modules and placeholder soundness theorems).
 - **Milestones:**
   1. Encode syntax + typing rules (`lean/src/syntax.lean`).
   2. Prove progress/preservation theorems for the core calculus.
@@ -25,9 +25,12 @@ strand. Detailed artefacts live under `research/`.
 
 ## 2. Empirical Performance & Safety Studies
 
-- **Benchmark Harness:** Cargo crate under `research/benchmarks/` using Criterion
-  to measure scheduler throughput, zone hand-off latency, and region allocator
-  behaviour.
+- **Benchmark Harness:** Cargo crate under `research/benchmarks/` using Criterion.
+- **Implemented Scenarios:**
+  - `actor_spawn_join` (scheduler throughput)
+  - `zone_handoff` (region transfer engine)
+  - `timer_wheel` (batch timer scheduling)
+  - `ffi_roundtrip` (libc `strlen` via FFI manager)
 - **Workloads:** Actor pipeline, GPU blur, realtime control loop, FFI boundary.
 - **Reporting:** Benchmarks produce JSON + Markdown summaries stored in
   `research/benchmarks/results/` (to be generated).

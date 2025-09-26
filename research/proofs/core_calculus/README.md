@@ -17,7 +17,9 @@ This folder tracks the mechanised proof effort required by Task 26.
 
 ## Tooling
 
-- **Lean 4** (`lean-toolchain` file forthcoming).
+- **Lean 4** project scaffold located in `lean/` (see `lean-toolchain` and
+  `lakefile.lean`). Run `lake build` to check modules or `lake exe
+  aurora-calc-check` for a quick sanity check.
 - Alternative Coq scripts under `coq/` if Lean libraries prove limiting.
 
 ## Milestones

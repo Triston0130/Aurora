@@ -89,10 +89,14 @@ checksum = "7c02d123df017efcdfbd739ef81735b36c5ba83ec3c59c80a9d7ecc718f92e50"
 name = "aurora-benchmarks"
 version = "0.1.0"
 dependencies = [
+ "aurora-runtime-ffi",
  "aurora-runtime-io",
+ "aurora-runtime-memory",
  "aurora-runtime-scheduler",
  "aurora-zone-manager",
  "criterion",
+ "crossbeam-channel",
+ "libloading",
 ]
 
 [[package]]
