@@ -1,0 +1,37 @@
+use stdlib::prelude::*;
+use aurora_runtime_memory::region::{ImageRegion, RegionHandle};
+use aurora_zone_manager::{Zone, ZoneManager};
+
+struct BlurConfig {
+    radius: Int32,
+}
+
+zone GPU blur_kernel(region: RegionHandle<ImageRegion>, cfg: BlurConfig) -> RegionHandle<ImageRegion> {
+    launch threads_for(region) {
+        let pixel = region.read(current_coord());
+        let neighbours = region.neighbourhood(current_coord(), cfg.radius);
+        let average = neighbours.iter().sum::<Pixel>() / neighbours.len();
+        region.write(current_coord(), blend(pixel, average));
+    }
+    region
+}
+
+fn main() {
+    let manager = ZoneManager::new();
+    let cpu_zone = Zone::cpu();
+
+    let image = ImageRegion::load("assets/city.png").expect("load test image");
+    let region = RegionHandle::from(image);
+
+    let gpu = Zone::gpu();
+    let descriptor = blur_kernel { radius: 5 };
+
+    let blurred = manager
+        .dispatch_zone(gpu, descriptor, region.clone())
+        .expect("dispatch blur kernel");
+
+    let final_image = blurred.into_inner();
+    final_image.save("/tmp/city-blurred.png").expect("save image");
+
+    println!("blurred image written to /tmp/city-blurred.png");
+}

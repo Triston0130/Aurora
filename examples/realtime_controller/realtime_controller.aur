@@ -1,0 +1,92 @@
+use stdlib::prelude::*;
+use aurora_runtime_scheduler::{ActorDirective, Message};
+use aurora_zone_manager::{Zone, ZoneManager};
+use aurora_runtime_memory::region::RegionHandle;
+
+struct Telemetry {
+    timestamp_ms: Int64,
+    position: Float64,
+    velocity: Float64,
+}
+
+struct ControlOutput {
+    torque: Float64,
+}
+
+zone REALTIME controller_loop(
+    telemetry: RegionHandle<Telemetry>,
+    deadline_ms: Int64,
+) -> ControlOutput {
+    let start = clock::now();
+    let data = telemetry.read();
+    let error = setpoint() - data.position;
+    let torque = pid(error, data.velocity);
+
+    if clock::since(start) > Duration::from_millis(deadline_ms) {
+        panic!("deadline exceeded");
+    }
+
+    ControlOutput { torque }
+}
+
+actor TelemetryFeeder {
+    fn run(mut self, pipe: Sender<Telemetry>) -> ActorDirective {
+        loop {
+            let reading = read_sensor();
+            pipe.send(reading);
+            timer::sleep(Duration::from_millis(1)).await;
+        }
+    }
+}
+
+fn main() {
+    let manager = ZoneManager::new();
+    let realtime = Zone::realtime();
+    let cpu = Zone::cpu();
+
+    let supervisor = manager.supervisor(cpu);
+    let (tx, rx) = channel::<Telemetry>();
+
+    supervisor
+        .spawn_actor("feeder", TelemetryFeeder { pipe: tx.clone() })
+        .expect("spawn feeder");
+
+    loop {
+        match rx.recv_timeout(Duration::from_millis(5)) {
+            Some(reading) => {
+                let handle = RegionHandle::from(reading);
+                match manager.dispatch_zone(realtime, controller_loop { deadline_ms: 2 }, handle) {
+                    Ok(output) => println!("torque command: {}", output.torque),
+                    Err(err) => {
+                        eprintln!("deadline violation: {err}");
+                        break;
+                    }
+                }
+            }
+            None => {
+                println!("sensor timeout, shutting down controller");
+                break;
+            }
+        }
+    }
+
+    println!("controller loop stopped");
+}
+
+fn read_sensor() -> Telemetry {
+    Telemetry {
+        timestamp_ms: clock::now().as_millis() as Int64,
+        position: random::normal(42.0, 0.05),
+        velocity: random::normal(0.0, 0.01),
+    }
+}
+
+fn setpoint() -> Float64 {
+    42.0
+}
+
+fn pid(error: Float64, velocity: Float64) -> Float64 {
+    let kp = 1.2;
+    let kd = 0.1;
+    kp * error - kd * velocity
+}

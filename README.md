@@ -1,57 +1,109 @@
 # Aurora Programming Language
 
-Aurora is a research-grade systems language that combines static ownership, effectful typing, and structured concurrency to deliver safe performance across heterogeneous hardware. This repository hosts the full stack: specification, compiler, runtime, standard library, and developer tooling.
+> Effect-aware systems programming across CPUs, GPUs, and realtime controllers.
 
-## Current Status
-- Project inception under the "Bootstrap Initiative".
-- Roadmap drafted in [`docs/ROADMAP.md`](docs/ROADMAP.md).
-- Repository scaffolding underway; component directories in place.
+Aurora is a research-grade language exploring how ownership, effect typing, and
+structured concurrency can coexist without sacrificing performance. This
+repository hosts the entire stack: specification, compiler prototypes, runtime
+services, standard library, developer tooling, sample applications, and outreach
+materials.
 
-## Near-Term Objectives
-1. Execute the numbered master checklist in [`docs/TODO.md`](docs/TODO.md).
-2. Flesh out the Language Reference Manual outline under `docs/spec/`.
-3. Implement lexical grammar prototypes inside `compiler/prototypes/`.
-4. Spike the actor scheduler within `runtime/scheduler/`.
-5. Establish continuous integration scripts and coding standards.
+## Highlights
 
-## Repository Layout
+- **Effect-aware type system** with region ownership and trait constraints.
+- **Structured concurrency runtime** featuring supervision trees and zone
+  policies.
+- **Zone manager** for GPU offload, realtime deadlines, and sandboxed I/O.
+- **Developer tooling** (package manager, formatter, linter, LSP, debugger,
+  REPL) to make experiments productive.
+- **Sample applications** covering web services, GPU data processing, and
+  realtime control loops.
+
+## Quick Start
+
+```bash
+git clone https://github.com/Triston0130/Aurora.git
+cd Aurora
+rustup component add rustfmt clippy
+./tools/ci.sh                # fmt + clippy + tests + doc tests
 ```
-compiler/           # Front-end, middle-end, and back-end crates
-runtime/            # Actor scheduler, zone manager, memory services
-stdlib/             # Core collections, async primitives, smart pointers
-tools/              # Package manager, formatter, linter, language server, REPL, debugger prototypes
-docs/               # Roadmap, specifications, reference manuals, tutorials
+
+Use the prototype compiler to run examples:
+
+```bash
+cargo run -p aurora-compiler-prototypes --bin aurora_cli -- \
+  examples/web_server/web_server.aur
+```
+
+Target specific CI stages locally:
+
+```
+AURORA_CI_MODE=lint ./tools/ci.sh   # lint stage only
+AURORA_CI_MODE=test ./tools/ci.sh   # test/doc stage only
+```
+
+Rust 1.75+ is recommended. LLVM tools (`rustup component add llvm-tools-preview`)
+help inspect emitted IR.
+
+## Documentation
+
+- **Aurora Book:** `docs/book/` (`mdbook serve docs/book`).
+- **API Overview:** [`docs/reference/api_overview.md`](docs/reference/api_overview.md).
+- **Language Reference:** [`docs/spec/language_reference.md`](docs/spec/language_reference.md).
+- **Testing Guide:** [`docs/TESTING.md`](docs/TESTING.md).
+- **Outreach Materials:** [`docs/outreach/`](docs/outreach).
+
+## Architecture Overview
+
+```
+compiler/           # Front-end experiments, type/effect solver, LLVM backend
+runtime/            # Scheduler, zone manager, memory services, async I/O, FFI
+stdlib/             # Prelude, async helpers, collections, region utilities
+tools/              # aurorapm, aurorafmt, auroralint, aurorals, auroradebug, aurorarepl
+examples/           # Web server, GPU kernel, realtime controller samples
+docs/               # Book, specs, outreach kits, CI/testing guides
 research/           # Notes, citations, experiment logs
-examples/           # Canonical Aurora programs
 ```
 
-## Bootstrap Workspace
-Early-stage experiments live in a shared Cargo workspace rooted at the repository top-level.
+## Sample Applications
 
-```
-cargo test --all                             # run unit/integration tests for every crate
-cargo test --workspace --doc                 # execute documentation snippets
-./tools/test-all.sh                          # fmt + clippy + unit/integration/doc tests
-AURORA_CI_MODE=lint ./tools/ci.sh            # CI lint stage (fmt + clippy)
-./tools/ci.sh                                # CI-equivalent full pipeline
-```
+- [`examples/web_server`](examples/web_server) – structured concurrency HTTP
+  service in the CPU zone.
+- [`examples/gpu_image_filter`](examples/gpu_image_filter) – GPU blur kernel with
+  region hand-offs.
+- [`examples/realtime_controller`](examples/realtime_controller) – deadline-aware
+  control loop in the realtime zone.
 
-Rust 1.75+ is recommended; the first build will download Tokio and tracing dependencies. These crates bridge us to native Aurora implementations once self-hosting becomes viable.
+Each directory includes runnable `.aur` code and a README covering architecture
+choices and experiments.
+
+## Tooling & CI
+
+- `./tools/test-all.sh` – fmt + clippy + unit/integration/doc tests.
+- `./tools/ci.sh` – mirrors the GitHub Actions matrix (Ubuntu/macOS/Windows).
+- Tooling binaries (`tools/aurora*`) carry their own unit tests (`cargo test -p
+  <tool>`).
 
 ## Development Philosophy
-- **Academic rigour**: every feature is justified with formal analysis or empirical evidence.
-- **Pedagogical clarity**: source code and documentation double as teaching material.
-- **Safety without compromise**: compilation rejects programs that violate memory, effect, or concurrency invariants.
-- **Interoperability**: seamless FFI with C and gradual support for other ecosystems.
+
+- **Academic rigour:** features trace back to research questions.
+- **Pedagogical clarity:** code and documentation double as teaching material.
+- **Safety without compromise:** invariants enforced at compile time or via
+  supervisor policies.
+- **Interoperability:** FFI capabilities and zone descriptors bring external
+  systems into the model.
 
 ## Governance & Participation
+
 - License: [Apache 2.0](LICENSE)
 - Contribution guide: [`docs/reference/CONTRIBUTING.md`](docs/reference/CONTRIBUTING.md)
-- Governance charter: [`docs/GOVERNANCE.md`](docs/GOVERNANCE.md)
-- RFC process: [`docs/RFC_PROCESS.md`](docs/RFC_PROCESS.md)
-- Release policy: [`docs/RELEASES.md`](docs/RELEASES.md)
+- Master checklist: [`docs/TODO.md`](docs/TODO.md)
+- Roadmap: [`docs/ROADMAP.md`](docs/ROADMAP.md)
 
-Open collaboration is central to Aurora. Early adopters can participate in design reviews, contribute to the research notebook, and claim tasks from the master checklist.
+Design records live under `design/adr/`. Research artefacts and citations reside
+in `research/`. Outreach kits (press, blog, talk outline) are in
+`docs/outreach/`.
 
 ---
-*Maintained by Prof. Triston Miller (Harvard SEAS) as a capstone research endeavour.*
+*Maintained by Prof. Triston Miller (Harvard SEAS) as a capstone research
+endeavour.*

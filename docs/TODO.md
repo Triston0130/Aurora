@@ -25,8 +25,8 @@ This list enumerates every task required to take Aurora from its current prototy
 ~~21. Assemble the standard library core: Option/Result, strings, iterators, collections, smart pointers, region handles, async primitives, zone APIs, error utilities, math/IO/serialization.~~ (done)
 ~~22. Compile and pass an extensive suite of unit, integration, and doc tests across compiler, runtime, and stdlib.~~ (done)
 ~~23. Construct developer tooling: package manager (aurorapm), formatter (aurorafmt), linter, Language Server Protocol implementation, debugger adapters, REPL.~~ (done)
-24. Set up continuous integration pipelines for linting, formatting, tests, docs, fuzzing, sanitizers, and benchmarking (with dashboards).
-25. Produce documentation and outreach material: refreshed README, Aurora Book, API docs, blog/site, sample applications (web server, GPU kernel, realtime controller), academic publications.
+~~24. Set up continuous integration pipelines for linting, formatting, tests, docs, fuzzing, sanitizers, and benchmarking (with dashboards).~~ (done)
+~~25. Produce documentation and outreach material: refreshed README, Aurora Book, API docs, blog/site, sample applications (web server, GPU kernel, realtime controller), academic publications.~~ (done)
 26. Complete research validation: mechanised proofs or formal verification of core calculus, empirical performance and safety studies, developer usability feedback.
 27. Achieve self-hosting: compile the front-end and MIR passes with Aurora itself, package cross-platform toolchains, and publish the 1.0 release with installers and registry launch.
 

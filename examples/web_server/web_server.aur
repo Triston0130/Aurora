@@ -1,0 +1,94 @@
+use stdlib::prelude::*;
+use aurora_runtime_io::network::TcpServer;
+use aurora_runtime_scheduler::{ActorDirective, Message};
+use aurora_zone_manager::{SupervisorHandle, Zone, ZoneManager};
+
+struct HttpRequest {
+    method: String,
+    path: String,
+    body: String,
+}
+
+struct HttpResponse {
+    status: Int32,
+    body: String,
+}
+
+actor Logger {
+    fn run(mut self) -> ActorDirective {
+        loop {
+            match self.recv() {
+                Message::Log(line) => println!("[log] {line}"),
+                Message::Shutdown => break,
+                _ => {}
+            }
+        }
+        ActorDirective::Stop
+    }
+}
+
+actor HttpWorker {
+    fn run(mut self, server: TcpServer, logger: SupervisorHandle) -> ActorDirective {
+        loop {
+            match server.accept() {
+                Ok((mut stream, peer)) => {
+                    logger.send(Message::Log(format!("accepted {peer}")));
+                    let request = parse_request(stream.read().unwrap_or_default());
+                    let response = handle_request(request);
+                    stream.write(response_to_bytes(response)).ok();
+                }
+                Err(err) => {
+                    logger.send(Message::Log(format!("accept error: {err}")));
+                }
+            }
+        }
+    }
+}
+
+fn parse_request(bytes: Vec<u8>) -> HttpRequest {
+    // Simplified parser for illustration only
+    HttpRequest {
+        method: "GET".into(),
+        path: String::from_utf8(bytes).unwrap_or_else(|_| "/".into()),
+        body: String::new(),
+    }
+}
+
+fn handle_request(request: HttpRequest) -> HttpResponse {
+    match request.path.as_str() {
+        "/health" => HttpResponse { status: 200, body: "ok".into() },
+        "/" => HttpResponse {
+            status: 200,
+            body: "Welcome to Aurora!".into(),
+        },
+        _ => HttpResponse { status: 404, body: "not found".into() },
+    }
+}
+
+fn response_to_bytes(response: HttpResponse) -> Vec<u8> {
+    format!(
+        "HTTP/1.1 {status}\r\nContent-Length: {len}\r\n\r\n{body}",
+        status = response.status,
+        len = response.body.len(),
+        body = response.body
+    )
+    .into_bytes()
+}
+
+fn main() {
+    let manager = ZoneManager::new();
+    let cpu = Zone::cpu();
+
+    let supervisor = manager.supervisor(cpu);
+    let logger = supervisor
+        .spawn_actor("logger", Logger {})
+        .expect("spawn logger");
+
+    let server = TcpServer::bind("127.0.0.1:8080").expect("bind");
+    supervisor
+        .spawn_actor("worker", HttpWorker { server, logger: logger.handle() })
+        .expect("spawn worker");
+
+    println!("Server listening on http://127.0.0.1:8080");
+    supervisor.join().expect("join supervisor");
+}
