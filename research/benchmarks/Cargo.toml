@@ -16,9 +16,17 @@ aurora-runtime-ffi = { path = "../../runtime/ffi" }
 criterion = { version = "0.5", features = ["cargo_bench_support"] }
 crossbeam-channel = "0.5"
 libloading = "0.8"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+walkdir = "2"
+anyhow = "1"
 
 [dev-dependencies]
 criterion = { version = "0.5", features = ["cargo_bench_support"] }
+
+[[bin]]
+name = "collate"
+path = "src/bin/collate.rs"
 
 [[bench]]
 name = "actor_throughput"
@@ -34,4 +42,12 @@ harness = false
 
 [[bench]]
 name = "ffi_roundtrip"
+harness = false
+
+[[bench]]
+name = "gpu_executor"
+harness = false
+
+[[bench]]
+name = "realtime_executor"
 harness = false

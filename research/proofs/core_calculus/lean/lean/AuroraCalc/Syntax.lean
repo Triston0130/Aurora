@@ -62,6 +62,62 @@ namespace Term
 
 end Term
 
+inductive PureTerm : Term → Prop where
+  | var {x} : PureTerm (Term.var x)
+  | unit : PureTerm Term.unit
+  | lam {x τ ε body} (hb : PureTerm body) : PureTerm (Term.lam x τ ε body)
+  | app {f a} (hf : PureTerm f) (ha : PureTerm a) : PureTerm (Term.app f a)
+  | let_ {x value body} (hv : PureTerm value) (hb : PureTerm body) :
+      PureTerm (Term.let_ x value body)
+
+namespace PureTerm
+
+@[simp] lemma of_var {x} : PureTerm (Term.var x) := PureTerm.var
+
+@[simp] lemma of_unit : PureTerm Term.unit := PureTerm.unit
+
+@[simp] lemma lam_body {x τ ε body} :
+    PureTerm body → PureTerm (Term.lam x τ ε body) := PureTerm.lam
+
+@[simp] lemma app_left {f a} (hf : PureTerm f) (ha : PureTerm a) :
+    PureTerm (Term.app f a) := PureTerm.app hf ha
+
+@[simp] lemma let_binding {x value body}
+    (hv : PureTerm value) (hb : PureTerm body) :
+    PureTerm (Term.let_ x value body) := PureTerm.let_ hv hb
+
+lemma subst {body value : Term} {x : String}
+    (hb : PureTerm body) (hv : PureTerm value) :
+    PureTerm (Term.subst x value body) := by
+  revert value x
+  induction hb with
+  | var y =>
+      intro value x
+      by_cases h : y = x
+      · subst h
+        simp [Term.subst, hv]
+      · simp [Term.subst, h, PureTerm.var]
+  | unit =>
+      intro value x
+      simp [Term.subst]
+  | lam y τ ε body hb ih =>
+      intro value x
+      by_cases h : y = x
+      · subst h
+        simp [Term.subst]
+      · simp [Term.subst, h, ih]
+  | app hf ha ihf iha =>
+      intro value x
+      simp [Term.subst, ihf, iha]
+  | let_ y value' body hv' hb' ihv ihb =>
+      intro value x
+      by_cases h : y = x
+      · subst h
+        simp [Term.subst, hv']
+      · simp [Term.subst, h, ihv, ihb]
+
+end PureTerm
+
 /-- Values are canonical forms that evaluation cannot reduce further. -/
 inductive Value : Term → Prop where
   | vUnit : Value Term.unit

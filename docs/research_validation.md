@@ -31,9 +31,12 @@ strand. Detailed artefacts live under `research/`.
   - `zone_handoff` (region transfer engine)
   - `timer_wheel` (batch timer scheduling)
   - `ffi_roundtrip` (libc `strlen` via FFI manager)
+  - `gpu_executor` (simulated GPU kernel pipelines)
+  - `realtime_executor` (realtime task scheduling against budget)
 - **Workloads:** Actor pipeline, GPU blur, realtime control loop, FFI boundary.
 - **Reporting:** Benchmarks produce JSON + Markdown summaries stored in
-  `research/benchmarks/results/` (to be generated).
+  `research/benchmarks/results/`. Run `cargo run -p aurora-benchmarks --bin collate`
+  to distill the latest Criterion output into Markdown tables.
 - **Safety Checks:** Each benchmark verifies invariants (no leaked regions,
   deadlines met) and logs violations for later analysis.
 

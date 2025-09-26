@@ -22,9 +22,22 @@ Benchmark results (Criterion JSON + Markdown) are written to
 | `zone_handoff` | Times region handle transfers between CPU and GPU regions. |
 | `timer_wheel` | Evaluates scheduling overhead for large batches of zero-delay timers. |
 | `ffi_roundtrip` | Benchmarks repeated FFI calls (`strlen`) through the capability manager. |
+| `gpu_executor` | Executes batched GPU kernel submissions using the simulated executor. |
+| `realtime_executor` | Measures realtime task scheduling versus deadline budget. |
 
-Initial implementation covers the first four scenarios; extend `benches/` as new
+Initial implementation covers the first six scenarios; extend `benches/` as new
 workloads are identified.
+
+## Result Aggregation
+
+Run the collator to summarise results into Markdown:
+
+```bash
+cargo run -p aurora-benchmarks --bin collate -- --output research/benchmarks/results/latest.md --commit "$(git rev-parse HEAD)"
+```
+
+The tool scans `target/criterion` for `estimates.json` files and emits a table
+of mean/median times and configured throughput values.
 
 ## Safety Checks
 
