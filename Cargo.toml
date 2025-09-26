@@ -15,6 +15,7 @@ members = [
     "tools/aurorals",
     "tools/aurorarepl",
     "tools/auroradebug",
+    "research/benchmarks",
 ]
 resolver = "2"
 
