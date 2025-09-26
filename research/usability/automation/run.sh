@@ -28,7 +28,12 @@ run_cmd() {
   fi
 }
 
-run_cmd "Environment" flake8 --version
+if command -v flake8 >/dev/null 2>&1; then
+  run_cmd "Environment" flake8 --version
+else
+  start_section "Environment"
+  echo "flake8 not installed; skipping"
+fi
 run_cmd "CI Lint" env AURORA_CI_MODE=lint "$ROOT/tools/ci.sh"
 
 run_cmd "Sample: Actor Pipeline" \

@@ -1,35 +1,19 @@
 use anyhow::{Context, Result};
-use serde::Deserialize;
 use std::env;
 use std::fs;
 use std::path::{Path, PathBuf};
 use walkdir::WalkDir;
 
-#[derive(Deserialize)]
+#[derive(serde::Deserialize)]
 struct EstimateSummary {
     #[serde(rename = "point_estimate")]
     point_estimate: f64,
 }
 
-#[derive(Deserialize)]
+#[derive(serde::Deserialize)]
 struct EstimatesFile {
     mean: EstimateSummary,
     median: EstimateSummary,
-}
-
-#[derive(Deserialize)]
-struct BenchmarkMeta {
-    throughput: Option<Throughput>,
-    #[serde(rename = "title")]
-    title: String,
-}
-
-#[derive(Deserialize)]
-struct Throughput {
-    #[serde(rename = "Elements")]
-    elements: Option<u64>,
-    #[serde(rename = "Bytes")]
-    bytes: Option<u64>,
 }
 
 struct BenchResult {
@@ -63,27 +47,35 @@ fn find_estimates(root: &Path) -> Result<Vec<BenchResult>> {
         };
         let estimates: EstimatesFile = match serde_json::from_str(&estimates_contents) {
             Ok(value) => value,
-            Err(_) => continue,
+            Err(err) => {
+                eprintln!("failed to parse estimates {:?}: {}", path, err);
+                continue;
+            }
         };
 
-        let meta_path = bench_dir.join("benchmark.json");
-        let meta_contents = match fs::read_to_string(&meta_path) {
-            Ok(content) => content,
-            Err(_) => continue,
-        };
-        let meta: BenchmarkMeta = match serde_json::from_str(&meta_contents) {
-            Ok(value) => value,
-            Err(_) => continue,
-        };
+        let throughput = fs::read_to_string(bench_dir.join("benchmark.json"))
+            .ok()
+            .and_then(|contents| serde_json::from_str::<serde_json::Value>(&contents).ok())
+            .and_then(|value| value.get("throughput").cloned())
+            .and_then(|tp| {
+                tp.get("Elements")
+                    .and_then(|v| v.as_u64())
+                    .map(|elems| format!("{} elem", elems))
+                    .or_else(|| {
+                        tp.get("Bytes")
+                            .and_then(|v| v.as_u64())
+                            .map(|bytes| format!("{} bytes", bytes))
+                    })
+            });
 
-        let throughput = meta.throughput.map(|tp| match (tp.elements, tp.bytes) {
-            (Some(elems), _) => format!("{} elem", elems),
-            (_, Some(bytes)) => format!("{} bytes", bytes),
-            _ => "--".to_string(),
-        });
+        let id = bench_dir
+            .strip_prefix(root)
+            .unwrap_or(bench_dir)
+            .display()
+            .to_string();
 
         results.push(BenchResult {
-            id: meta.title,
+            id,
             mean_ns: estimates.mean.point_estimate,
             median_ns: estimates.median.point_estimate,
             throughput,
@@ -116,7 +108,9 @@ fn format_markdown(results: &[BenchResult], commit: Option<&str>) -> String {
 
 fn main() -> Result<()> {
     let mut args = env::args().skip(1);
-    let mut criterion_dir = PathBuf::from("target/criterion");
+    let manifest_dir = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+    let default_dir = manifest_dir.join("../../target/criterion");
+    let mut criterion_dir = default_dir.canonicalize().unwrap_or(default_dir.clone());
     let mut output: Option<PathBuf> = None;
     let mut commit: Option<String> = None;
 
@@ -124,7 +118,8 @@ fn main() -> Result<()> {
         match arg.as_str() {
             "--criterion-dir" => {
                 let value = args.next().context("missing value for --criterion-dir")?;
-                criterion_dir = PathBuf::from(value);
+                let path = PathBuf::from(value);
+                criterion_dir = path.canonicalize().unwrap_or(path);
             }
             "--output" => {
                 let value = args.next().context("missing value for --output")?;

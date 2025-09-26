@@ -1,13 +1,14 @@
-# Web Server Sample
+# Web Server Sample (Placeholder)
 
-This example shows how Aurora's structured concurrency runtime can host an HTTP
-server entirely inside the CPU zone while delegating blocking I/O to the async
-runtime.
+The original long-term goal for this directory is to host a full HTTP server
+demonstrating structured concurrency. Until the runtime/tooling stack matures,
+the `.aur` file contains a lightweight placeholder that exercises the prototype
+parser and code-gen.
 
-## Highlights
-- Supervisors manage worker lifetimes and propagate cancellation on shutdown.
-- `aurora_runtime_io::network` handles async TCP accept/send operations.
-- Logs are forwarded to a dedicated actor to avoid blocking request handlers.
+## Current Behaviour
+- Defines a `start_server` function returning an integer port.
+- The `main` function calls `start_server` and evaluates the result.
+- Produces no diagnostics when compiled with `aurora_cli`.
 
 ## Running
 
@@ -16,10 +17,5 @@ cargo run -p aurora-compiler-prototypes --bin aurora_cli -- \
   examples/web_server/web_server.aur
 ```
 
-By default the server listens on `127.0.0.1:8080`. Use `curl` or a browser to
-issue requests and observe structured logs in the console.
-
-## Next Steps
-- Swap the inline router for an effect-handler driven router once available.
-- Add TLS support using the FFI layer and a native TLS library.
-- Forward metrics to the realtime zone for deadline monitoring.
+This keeps the documentation examples compiling cleanly while the full server
+implementation remains on the roadmap.

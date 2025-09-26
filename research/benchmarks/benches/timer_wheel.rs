@@ -20,23 +20,17 @@ fn schedule_timeouts(batch: usize) {
         .expect("spawn timer actor");
 
     let actor_handle = actor.handle();
-    let mut handles = Vec::with_capacity(batch);
 
     for _ in 0..batch {
-        handles.push(manager.schedule_timeout(
+        let handle = manager.schedule_timeout(
             Zone::cpu(),
             Duration::from_millis(0),
             actor_handle.clone(),
             Message::Work("tick".into()),
-        ));
-    }
+        );
 
-    for handle in &handles {
-        handle.join().expect("join timer");
-    }
-
-    for _ in 0..batch {
         rx.recv().expect("receive tick");
+        handle.join().expect("join timer");
     }
 
     actor_handle

@@ -1,13 +1,8 @@
-# Realtime Controller Sample
+# Realtime Controller Sample (Placeholder)
 
-A control loop executes inside the realtime zone with millisecond deadlines
-while CPU actors feed telemetry and collect diagnostics.
-
-## Highlights
-- Realtime zone enforces a 2 ms deadline per cycle.
-- Region hand-off carries sensor data between CPU and realtime actors.
-- Supervisor cancels the controller if deadlines are missed, demonstrating
-  structured cancellation cascades.
+This placeholder mirrors the future realtime controller example. The current
+`.aur` program implements a simple arithmetic helper so that the compiler
+pipeline remains green while the full realtime runtime is under construction.
 
 ## Running
 
@@ -16,11 +11,5 @@ cargo run -p aurora-compiler-prototypes --bin aurora_cli -- \
   examples/realtime_controller/realtime_controller.aur
 ```
 
-The program prints controller outputs and deadline statistics to stdout. Use the
-`AURORA_RT_JITTER` environment variable inside the example to simulate sensor
-noise or CPU contention.
-
-## Possible Extensions
-- Integrate with actual hardware via the FFI layer.
-- Feed the telemetry into the GPU image filter example for computer vision.
-- Emit metrics to the web server sample for live dashboards.
+The program produces no output; it simply ensures the parser and type checker
+can process the sample without diagnostics.
