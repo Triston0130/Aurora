@@ -16,7 +16,10 @@ fn realtime_schedule(batch: usize) {
             acc
         });
         let outcome = job.wait();
-        assert!(matches!(outcome.status, aurora_zone_manager::RealtimeStatus::Completed));
+        assert!(matches!(
+            outcome.status,
+            aurora_zone_manager::RealtimeStatus::Completed
+        ));
     }
 }
 
@@ -24,7 +27,9 @@ fn realtime_benchmark(c: &mut Criterion) {
     let mut group = c.benchmark_group("realtime_executor_schedule");
     let batch = 128;
     group.throughput(Throughput::Elements(batch as u64));
-    group.bench_function("schedule_batch_128", |b| b.iter(|| realtime_schedule(batch)));
+    group.bench_function("schedule_batch_128", |b| {
+        b.iter(|| realtime_schedule(batch))
+    });
     group.finish();
 }
 

@@ -40,6 +40,9 @@ struct BenchResult {
 }
 
 fn find_estimates(root: &Path) -> Result<Vec<BenchResult>> {
+    if !root.exists() {
+        return Ok(Vec::new());
+    }
     let mut results = Vec::new();
 
     for entry in WalkDir::new(root).into_iter().filter_map(|e| e.ok()) {
@@ -54,11 +57,24 @@ fn find_estimates(root: &Path) -> Result<Vec<BenchResult>> {
             .parent()
             .and_then(|p| p.parent())
             .context("unexpected directory layout for estimates.json")?;
-        let estimates: EstimatesFile = serde_json::from_str(&fs::read_to_string(path)?)
-            .with_context(|| format!("failed to parse {:?}", path))?;
+        let estimates_contents = match fs::read_to_string(path) {
+            Ok(content) => content,
+            Err(_) => continue,
+        };
+        let estimates: EstimatesFile = match serde_json::from_str(&estimates_contents) {
+            Ok(value) => value,
+            Err(_) => continue,
+        };
+
         let meta_path = bench_dir.join("benchmark.json");
-        let meta: BenchmarkMeta = serde_json::from_str(&fs::read_to_string(&meta_path)?)
-            .with_context(|| format!("failed to parse {:?}", meta_path))?;
+        let meta_contents = match fs::read_to_string(&meta_path) {
+            Ok(content) => content,
+            Err(_) => continue,
+        };
+        let meta: BenchmarkMeta = match serde_json::from_str(&meta_contents) {
+            Ok(value) => value,
+            Err(_) => continue,
+        };
 
         let throughput = meta.throughput.map(|tp| match (tp.elements, tp.bytes) {
             (Some(elems), _) => format!("{} elem", elems),
@@ -124,7 +140,23 @@ fn main() -> Result<()> {
         }
     }
 
+    if !criterion_dir.exists() {
+        println!(
+            "No Criterion summaries found in {}",
+            criterion_dir.display()
+        );
+        return Ok(());
+    }
+
     let summaries = find_estimates(&criterion_dir)?;
+    if summaries.is_empty() {
+        println!(
+            "No Criterion summaries found in {}",
+            criterion_dir.display()
+        );
+        return Ok(());
+    }
+
     let markdown = format_markdown(&summaries, commit.as_deref());
 
     if let Some(path) = output {

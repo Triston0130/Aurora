@@ -40,17 +40,21 @@ strand. Detailed artefacts live under `research/`.
 - **Safety Checks:** Each benchmark verifies invariants (no leaked regions,
   deadlines met) and logs violations for later analysis.
 
-## 3. Developer Usability Feedback
+## 3. Developer Usability Feedback (Automated)
 
-- **Study Design:** Survey + task-based usability sessions documented in
-  `research/usability/survey_outline.md`.
-- **Participants:** Minimum of 8 practitioners (systems, PL, and GPU engineers).
-- **Instruments:**
-  - Pre-study survey (background, experience).
-  - Task scripts (build/run sample, extend zone policy, write effect handler).
-  - Post-study questionnaire capturing SUS scores and qualitative feedback.
-- **Analysis:** Compile findings in `research/usability/findings.md` after each
-  wave.
+- **Automation Script:** `tools/usability-self-assess.sh` orchestrates lint
+  checks, sample program builds, documentation scans, and benchmark collation.
+- **Metrics:** Logged outputs include command transcripts, durations, and
+  warnings. Logs are stored under
+  `research/usability/automation/output/` (latest symlink maintained).
+- **Heuristics:** Current checks validate:
+  - `./tools/ci.sh` lint stage
+  - Compilation of web server, GPU blur, and realtime controller examples
+  - Documentation scan for lingering TODO markers
+  - Benchmark summary via `cargo run -p aurora-benchmarks --bin collate`
+- **Iteration:** Extend the script as new usability heuristics are identified
+  (e.g., API doc coverage, link validation). Summaries should be referenced in
+  quarterly research notes.
 
 ## Integration & Reporting
 

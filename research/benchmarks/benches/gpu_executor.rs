@@ -1,4 +1,4 @@
-use aurora_zone_manager::{DataTransferEngine, HostBuffer, GpuExecutor};
+use aurora_zone_manager::{DataTransferEngine, GpuExecutor, HostBuffer};
 use criterion::{criterion_group, criterion_main, Criterion, Throughput};
 
 fn gpu_identity(batch: usize) {

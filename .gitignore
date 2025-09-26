@@ -13,6 +13,7 @@
 /docs/reference/api/
 /logs/
 /*.log
+/research/usability/automation/output/
 
 # OS metadata
 .DS_Store
