@@ -1,0 +1,19 @@
+# Build artifacts
+/target/
+/build/
+/dist/
+
+# Tooling caches
+/.cargo/
+/.aurora/
+/.idea/
+/.vscode/
+
+# Generated docs and logs
+/docs/reference/api/
+/logs/
+/*.log
+
+# OS metadata
+.DS_Store
+Thumbs.db

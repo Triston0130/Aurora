@@ -1,0 +1,24 @@
+[workspace]
+members = [
+    "compiler/prototypes",
+    "compiler/effect-solver",
+    "runtime/scheduler",
+    "runtime/memory",
+    "runtime/io",
+    "runtime/ffi",
+    "runtime/zone_manager",
+    "stdlib/core",
+    "tests/integration",
+    "tools/aurorapm",
+    "tools/aurorafmt",
+    "tools/auroralint",
+    "tools/aurorals",
+    "tools/aurorarepl",
+    "tools/auroradebug",
+]
+resolver = "2"
+
+[workspace.package]
+edition = "2021"
+authors = ["Aurora Research Team"]
+license = "Apache-2.0"

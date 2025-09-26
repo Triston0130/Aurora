@@ -1,0 +1,12 @@
+[package]
+name = "aurora-runtime-io"
+version = "0.1.0"
+edition = "2021"
+authors = ["Aurora Research Team"]
+description = "Asynchronous I/O services integrated with the Aurora runtime scheduler"
+license = "Apache-2.0"
+
+[dependencies]
+aurora-runtime-scheduler = { path = "../scheduler" }
+aurora-zone-manager = { path = "../zone_manager" }
+crossbeam-channel = "0.5"

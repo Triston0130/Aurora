@@ -1,0 +1,21 @@
+use crate::{self as crate_mod, prelude::*, runtime::scheduler::Scheduler as Sched};
+use std::{
+    collections::{hash_map::{self, Entry}, HashMap},
+    fmt::{self, Display},
+};
+
+async fn select(flag: Bool) -> Int32 ! <Async> {
+    let mut state = HashMap::new();
+    match state.entry("flag") {
+        Entry::Vacant(slot) => {
+            slot.insert(flag);
+        }
+        Entry::Occupied(mut slot) => {
+            slot.insert(flag);
+        }
+    };
+
+    let handle = spawn compute(flag);
+    await handle;
+    return 0;
+}

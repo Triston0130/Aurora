@@ -1,0 +1,118 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  lint:
+    name: Lint (ubuntu)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy,rustfmt
+
+      - name: Cache cargo artifacts
+        uses: Swatinem/rust-cache@v2
+        with:
+          shared-key: lint-${{ runner.os }}-stable
+
+      - name: Run lint suite
+        run: AURORA_CI_MODE=lint ./tools/ci.sh
+        shell: bash
+
+      - name: Show diagnostics on failure
+        if: failure()
+        run: |
+          echo "==> cargo metadata"
+          cargo metadata --format-version 1
+          echo "==> target logs"
+          find target -maxdepth 3 -type f -name "*.log" -print || true
+        shell: bash
+
+  test-linux:
+    name: Tests (ubuntu)
+    needs: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache cargo artifacts
+        uses: Swatinem/rust-cache@v2
+        with:
+          shared-key: tests-${{ runner.os }}-stable
+
+      - name: Run full test suite
+        run: ./tools/ci.sh
+        shell: bash
+
+      - name: Show diagnostics on failure
+        if: failure()
+        run: |
+          echo "==> ls target"
+          ls -R target | head -n 200 || true
+        shell: bash
+
+  test-macos:
+    name: Tests (macos)
+    needs: lint
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache cargo artifacts
+        uses: Swatinem/rust-cache@v2
+        with:
+          shared-key: tests-${{ runner.os }}-stable
+
+      - name: Run macOS test suite
+        run: AURORA_CI_MODE=test AURORA_SKIP_DOC_TESTS=1 ./tools/ci.sh
+        shell: bash
+
+      - name: Show diagnostics on failure
+        if: failure()
+        run: |
+          echo "==> ls target"
+          ls -R target | head -n 200 || true
+        shell: bash
+
+  test-windows:
+    name: Tests (windows)
+    needs: lint
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache cargo artifacts
+        uses: Swatinem/rust-cache@v2
+        with:
+          shared-key: tests-${{ runner.os }}-stable
+
+      - name: Run Windows test suite
+        run: AURORA_CI_MODE=test AURORA_SKIP_DOC_TESTS=1 ./tools/ci.sh
+        shell: bash
+
+      - name: Show diagnostics on failure
+        if: failure()
+        run: |
+          echo "==> dir target"
+          ls -R target | head -n 200 || true
+        shell: bash

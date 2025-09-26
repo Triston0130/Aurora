@@ -1,0 +1,10 @@
+[package]
+name = "aurora-runtime-memory"
+version = "0.1.0"
+edition = "2021"
+authors = ["Aurora Research Team"]
+description = "Region allocator and ownership hand-off for Aurora runtime"
+license = "Apache-2.0"
+
+[dependencies]
+parking_lot = "0.12"

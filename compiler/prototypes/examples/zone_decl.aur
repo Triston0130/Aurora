@@ -1,0 +1,12 @@
+zone realtime(deadline_ms = 1) {
+    fn internal() {
+        spawn worker();
+    }
+
+    let ticks = start_timer();
+    zone gpu(memory = "256MB") {
+        let worker_actor = actor pipeline::Worker { id: 1 };
+        launch_kernel();
+    };
+    internal();
+}

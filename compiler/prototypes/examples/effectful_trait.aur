@@ -1,0 +1,12 @@
+trait Logger {
+    effect Output = <IO>;
+    fn log(receiver: &Self, message: String) -> Unit ! Output;
+}
+
+struct Stdout;
+
+impl Logger for Stdout {
+    fn log(receiver: &Stdout, message: String) -> Unit ! <IO> {
+        println(message);
+    }
+}

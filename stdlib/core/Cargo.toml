@@ -1,0 +1,16 @@
+[package]
+name = "aurora-stdlib"
+version = "0.1.0"
+edition = "2021"
+authors = ["Aurora Research Team"]
+description = "Aurora standard library primitives and utilities"
+license = "Apache-2.0"
+
+[dependencies]
+aurora-runtime-scheduler = { path = "../../runtime/scheduler" }
+aurora-runtime-memory = { path = "../../runtime/memory" }
+aurora-runtime-io = { path = "../../runtime/io" }
+aurora-zone-manager = { path = "../../runtime/zone_manager" }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+parking_lot = "0.12"

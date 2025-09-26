@@ -1,0 +1,10 @@
+use math::Matrix;
+
+fn kernel_mul(a: Matrix, b: Matrix) -> Matrix ! <Gpu> {
+    launch(a, b)
+}
+
+@zone(gpu)
+pub fn compute(a: Matrix, b: Matrix) -> Matrix ! <Gpu> {
+    return kernel_mul(a, b);
+}

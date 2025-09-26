@@ -1,0 +1,13 @@
+use std::fmt::Display;
+
+fn copy_from(src: *const Int32, dst: *mut Int32, len: Int32) -> *mut Int32 {
+    dst
+}
+
+fn with_logger<'a: 'static, T: Display>(value: &'a T, sink: dyn Display) -> dyn Display {
+    sink
+}
+
+fn borrow_chain<'short: 'long, 'long>(input: &'short &'long String) -> &'long String {
+    *input
+}

@@ -1,0 +1,616 @@
+---
+source: compiler/prototypes/tests/grammar_snapshots.rs
+expression: "format!(\"{ast:#?}\")"
+---
+Module {
+    id: NodeId(
+        0,
+    ),
+    span: Span {
+        file: FileId(
+            0,
+        ),
+        start: Position {
+            offset: 0,
+            line: 0,
+            column: 0,
+        },
+        end: Position {
+            offset: 0,
+            line: 0,
+            column: 0,
+        },
+        line: 0,
+        column: 0,
+    },
+    docs: [],
+    items: [
+        Use(
+            UseDecl {
+                attributes: [],
+                docs: [],
+                visibility: Private,
+                tree: Path {
+                    leading_colon: false,
+                    segments: [
+                        PathSegment {
+                            ident: "std",
+                            generics: [],
+                        },
+                        PathSegment {
+                            ident: "fmt",
+                            generics: [],
+                        },
+                        PathSegment {
+                            ident: "Display",
+                            generics: [],
+                        },
+                    ],
+                    alias: None,
+                },
+                span: Span {
+                    file: FileId(
+                        0,
+                    ),
+                    start: Position {
+                        offset: 0,
+                        line: 1,
+                        column: 1,
+                    },
+                    end: Position {
+                        offset: 3,
+                        line: 1,
+                        column: 4,
+                    },
+                    line: 1,
+                    column: 1,
+                },
+                id: NodeId(
+                    1,
+                ),
+            },
+        ),
+        Function(
+            FunctionDecl {
+                attributes: [],
+                docs: [],
+                visibility: Private,
+                signature: FunctionSig {
+                    constness: false,
+                    asyncness: false,
+                    name: "copy_from",
+                    generics: GenericParams {
+                        params: [],
+                    },
+                    params: [
+                        Param {
+                            name: "src",
+                            ty: RawPointer {
+                                mutable: false,
+                                inner: Path(
+                                    PathType {
+                                        leading_colon: false,
+                                        segments: [
+                                            PathSegment {
+                                                ident: "Int32",
+                                                generics: [],
+                                            },
+                                        ],
+                                    },
+                                ),
+                            },
+                        },
+                        Param {
+                            name: "dst",
+                            ty: RawPointer {
+                                mutable: true,
+                                inner: Path(
+                                    PathType {
+                                        leading_colon: false,
+                                        segments: [
+                                            PathSegment {
+                                                ident: "Int32",
+                                                generics: [],
+                                            },
+                                        ],
+                                    },
+                                ),
+                            },
+                        },
+                        Param {
+                            name: "len",
+                            ty: Path(
+                                PathType {
+                                    leading_colon: false,
+                                    segments: [
+                                        PathSegment {
+                                            ident: "Int32",
+                                            generics: [],
+                                        },
+                                    ],
+                                },
+                            ),
+                        },
+                    ],
+                    return_type: Some(
+                        RawPointer {
+                            mutable: true,
+                            inner: Path(
+                                PathType {
+                                    leading_colon: false,
+                                    segments: [
+                                        PathSegment {
+                                            ident: "Int32",
+                                            generics: [],
+                                        },
+                                    ],
+                                },
+                            ),
+                        },
+                    ),
+                    effect: None,
+                    where_clause: [],
+                },
+                body: Block {
+                    statements: [],
+                    tail: Some(
+                        Expr {
+                            kind: Path(
+                                PathExpr {
+                                    leading_colon: false,
+                                    segments: [
+                                        PathSegment {
+                                            ident: "dst",
+                                            generics: [],
+                                        },
+                                    ],
+                                    span: Span {
+                                        file: FileId(
+                                            0,
+                                        ),
+                                        start: Position {
+                                            offset: 105,
+                                            line: 4,
+                                            column: 5,
+                                        },
+                                        end: Position {
+                                            offset: 108,
+                                            line: 4,
+                                            column: 8,
+                                        },
+                                        line: 4,
+                                        column: 5,
+                                    },
+                                },
+                            ),
+                            span: Span {
+                                file: FileId(
+                                    0,
+                                ),
+                                start: Position {
+                                    offset: 105,
+                                    line: 4,
+                                    column: 5,
+                                },
+                                end: Position {
+                                    offset: 108,
+                                    line: 4,
+                                    column: 8,
+                                },
+                                line: 4,
+                                column: 5,
+                            },
+                        },
+                    ),
+                    span: Span {
+                        file: FileId(
+                            0,
+                        ),
+                        start: Position {
+                            offset: 99,
+                            line: 3,
+                            column: 76,
+                        },
+                        end: Position {
+                            offset: 110,
+                            line: 5,
+                            column: 2,
+                        },
+                        line: 3,
+                        column: 76,
+                    },
+                },
+                span: Span {
+                    file: FileId(
+                        0,
+                    ),
+                    start: Position {
+                        offset: 24,
+                        line: 3,
+                        column: 1,
+                    },
+                    end: Position {
+                        offset: 26,
+                        line: 3,
+                        column: 3,
+                    },
+                    line: 3,
+                    column: 1,
+                },
+                id: NodeId(
+                    2,
+                ),
+            },
+        ),
+        Function(
+            FunctionDecl {
+                attributes: [],
+                docs: [],
+                visibility: Private,
+                signature: FunctionSig {
+                    constness: false,
+                    asyncness: false,
+                    name: "with_logger",
+                    generics: GenericParams {
+                        params: [
+                            GenericParam {
+                                name: "'a",
+                                kind: Lifetime {
+                                    bounds: [
+                                        "'static",
+                                    ],
+                                },
+                            },
+                            GenericParam {
+                                name: "T",
+                                kind: Type {
+                                    bounds: [
+                                        PathType {
+                                            leading_colon: false,
+                                            segments: [
+                                                PathSegment {
+                                                    ident: "Display",
+                                                    generics: [],
+                                                },
+                                            ],
+                                        },
+                                    ],
+                                },
+                            },
+                        ],
+                    },
+                    params: [
+                        Param {
+                            name: "value",
+                            ty: Reference {
+                                lifetime: Some(
+                                    "'a",
+                                ),
+                                mutable: false,
+                                inner: Path(
+                                    PathType {
+                                        leading_colon: false,
+                                        segments: [
+                                            PathSegment {
+                                                ident: "T",
+                                                generics: [],
+                                            },
+                                        ],
+                                    },
+                                ),
+                            },
+                        },
+                        Param {
+                            name: "sink",
+                            ty: TraitObject(
+                                PathType {
+                                    leading_colon: false,
+                                    segments: [
+                                        PathSegment {
+                                            ident: "Display",
+                                            generics: [],
+                                        },
+                                    ],
+                                },
+                            ),
+                        },
+                    ],
+                    return_type: Some(
+                        TraitObject(
+                            PathType {
+                                leading_colon: false,
+                                segments: [
+                                    PathSegment {
+                                        ident: "Display",
+                                        generics: [],
+                                    },
+                                ],
+                            },
+                        ),
+                    ),
+                    effect: None,
+                    where_clause: [],
+                },
+                body: Block {
+                    statements: [],
+                    tail: Some(
+                        Expr {
+                            kind: Path(
+                                PathExpr {
+                                    leading_colon: false,
+                                    segments: [
+                                        PathSegment {
+                                            ident: "sink",
+                                            generics: [],
+                                        },
+                                    ],
+                                    span: Span {
+                                        file: FileId(
+                                            0,
+                                        ),
+                                        start: Position {
+                                            offset: 206,
+                                            line: 8,
+                                            column: 5,
+                                        },
+                                        end: Position {
+                                            offset: 210,
+                                            line: 8,
+                                            column: 9,
+                                        },
+                                        line: 8,
+                                        column: 5,
+                                    },
+                                },
+                            ),
+                            span: Span {
+                                file: FileId(
+                                    0,
+                                ),
+                                start: Position {
+                                    offset: 206,
+                                    line: 8,
+                                    column: 5,
+                                },
+                                end: Position {
+                                    offset: 210,
+                                    line: 8,
+                                    column: 9,
+                                },
+                                line: 8,
+                                column: 5,
+                            },
+                        },
+                    ),
+                    span: Span {
+                        file: FileId(
+                            0,
+                        ),
+                        start: Position {
+                            offset: 200,
+                            line: 7,
+                            column: 89,
+                        },
+                        end: Position {
+                            offset: 212,
+                            line: 9,
+                            column: 2,
+                        },
+                        line: 7,
+                        column: 89,
+                    },
+                },
+                span: Span {
+                    file: FileId(
+                        0,
+                    ),
+                    start: Position {
+                        offset: 112,
+                        line: 7,
+                        column: 1,
+                    },
+                    end: Position {
+                        offset: 114,
+                        line: 7,
+                        column: 3,
+                    },
+                    line: 7,
+                    column: 1,
+                },
+                id: NodeId(
+                    3,
+                ),
+            },
+        ),
+        Function(
+            FunctionDecl {
+                attributes: [],
+                docs: [],
+                visibility: Private,
+                signature: FunctionSig {
+                    constness: false,
+                    asyncness: false,
+                    name: "borrow_chain",
+                    generics: GenericParams {
+                        params: [
+                            GenericParam {
+                                name: "'short",
+                                kind: Lifetime {
+                                    bounds: [
+                                        "'long",
+                                    ],
+                                },
+                            },
+                            GenericParam {
+                                name: "'long",
+                                kind: Lifetime {
+                                    bounds: [],
+                                },
+                            },
+                        ],
+                    },
+                    params: [
+                        Param {
+                            name: "input",
+                            ty: Reference {
+                                lifetime: Some(
+                                    "'short",
+                                ),
+                                mutable: false,
+                                inner: Reference {
+                                    lifetime: Some(
+                                        "'long",
+                                    ),
+                                    mutable: false,
+                                    inner: Path(
+                                        PathType {
+                                            leading_colon: false,
+                                            segments: [
+                                                PathSegment {
+                                                    ident: "String",
+                                                    generics: [],
+                                                },
+                                            ],
+                                        },
+                                    ),
+                                },
+                            },
+                        },
+                    ],
+                    return_type: Some(
+                        Reference {
+                            lifetime: Some(
+                                "'long",
+                            ),
+                            mutable: false,
+                            inner: Path(
+                                PathType {
+                                    leading_colon: false,
+                                    segments: [
+                                        PathSegment {
+                                            ident: "String",
+                                            generics: [],
+                                        },
+                                    ],
+                                },
+                            ),
+                        },
+                    ),
+                    effect: None,
+                    where_clause: [],
+                },
+                body: Block {
+                    statements: [],
+                    tail: Some(
+                        Expr {
+                            kind: Unary {
+                                op: Deref,
+                                expr: Expr {
+                                    kind: Path(
+                                        PathExpr {
+                                            leading_colon: false,
+                                            segments: [
+                                                PathSegment {
+                                                    ident: "input",
+                                                    generics: [],
+                                                },
+                                            ],
+                                            span: Span {
+                                                file: FileId(
+                                                    0,
+                                                ),
+                                                start: Position {
+                                                    offset: 306,
+                                                    line: 12,
+                                                    column: 6,
+                                                },
+                                                end: Position {
+                                                    offset: 311,
+                                                    line: 12,
+                                                    column: 11,
+                                                },
+                                                line: 12,
+                                                column: 6,
+                                            },
+                                        },
+                                    ),
+                                    span: Span {
+                                        file: FileId(
+                                            0,
+                                        ),
+                                        start: Position {
+                                            offset: 306,
+                                            line: 12,
+                                            column: 6,
+                                        },
+                                        end: Position {
+                                            offset: 311,
+                                            line: 12,
+                                            column: 11,
+                                        },
+                                        line: 12,
+                                        column: 6,
+                                    },
+                                },
+                            },
+                            span: Span {
+                                file: FileId(
+                                    0,
+                                ),
+                                start: Position {
+                                    offset: 305,
+                                    line: 12,
+                                    column: 5,
+                                },
+                                end: Position {
+                                    offset: 311,
+                                    line: 12,
+                                    column: 11,
+                                },
+                                line: 12,
+                                column: 5,
+                            },
+                        },
+                    ),
+                    span: Span {
+                        file: FileId(
+                            0,
+                        ),
+                        start: Position {
+                            offset: 299,
+                            line: 11,
+                            column: 86,
+                        },
+                        end: Position {
+                            offset: 313,
+                            line: 13,
+                            column: 2,
+                        },
+                        line: 11,
+                        column: 86,
+                    },
+                },
+                span: Span {
+                    file: FileId(
+                        0,
+                    ),
+                    start: Position {
+                        offset: 214,
+                        line: 11,
+                        column: 1,
+                    },
+                    end: Position {
+                        offset: 216,
+                        line: 11,
+                        column: 3,
+                    },
+                    line: 11,
+                    column: 1,
+                },
+                id: NodeId(
+                    4,
+                ),
+            },
+        ),
+    ],
+}

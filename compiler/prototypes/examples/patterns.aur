@@ -1,0 +1,11 @@
+fn analyze(values: Vec<Int32>, pair: (Int32, Int32)) {
+    let move head @ (left, right) = pair;
+    let mut pivot @ [first, ..rest] = values;
+
+    for move item in pivot.iter() {
+        match (first, item) {
+            (0, current) | (current, 0) => println(current),
+            _ => (),
+        }
+    }
+}

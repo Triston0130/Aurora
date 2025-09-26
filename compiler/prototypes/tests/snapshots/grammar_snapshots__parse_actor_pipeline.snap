@@ -1,0 +1,969 @@
+---
+source: compiler/prototypes/tests/grammar_snapshots.rs
+expression: "format!(\"{ast:#?}\")"
+---
+Module {
+    id: NodeId(
+        0,
+    ),
+    span: Span {
+        file: FileId(
+            0,
+        ),
+        start: Position {
+            offset: 0,
+            line: 0,
+            column: 0,
+        },
+        end: Position {
+            offset: 0,
+            line: 0,
+            column: 0,
+        },
+        line: 0,
+        column: 0,
+    },
+    docs: [],
+    items: [
+        Use(
+            UseDecl {
+                attributes: [],
+                docs: [],
+                visibility: Private,
+                tree: Path {
+                    leading_colon: false,
+                    segments: [
+                        PathSegment {
+                            ident: "runtime",
+                            generics: [],
+                        },
+                        PathSegment {
+                            ident: "actors",
+                            generics: [],
+                        },
+                        PathSegment {
+                            ident: "Actor",
+                            generics: [],
+                        },
+                    ],
+                    alias: None,
+                },
+                span: Span {
+                    file: FileId(
+                        0,
+                    ),
+                    start: Position {
+                        offset: 0,
+                        line: 1,
+                        column: 1,
+                    },
+                    end: Position {
+                        offset: 3,
+                        line: 1,
+                        column: 4,
+                    },
+                    line: 1,
+                    column: 1,
+                },
+                id: NodeId(
+                    1,
+                ),
+            },
+        ),
+        Use(
+            UseDecl {
+                attributes: [],
+                docs: [],
+                visibility: Private,
+                tree: Path {
+                    leading_colon: false,
+                    segments: [
+                        PathSegment {
+                            ident: "runtime",
+                            generics: [],
+                        },
+                        PathSegment {
+                            ident: "actors",
+                            generics: [],
+                        },
+                        PathSegment {
+                            ident: "Inbox",
+                            generics: [],
+                        },
+                    ],
+                    alias: None,
+                },
+                span: Span {
+                    file: FileId(
+                        0,
+                    ),
+                    start: Position {
+                        offset: 28,
+                        line: 2,
+                        column: 1,
+                    },
+                    end: Position {
+                        offset: 31,
+                        line: 2,
+                        column: 4,
+                    },
+                    line: 2,
+                    column: 1,
+                },
+                id: NodeId(
+                    2,
+                ),
+            },
+        ),
+        Use(
+            UseDecl {
+                attributes: [],
+                docs: [],
+                visibility: Private,
+                tree: Path {
+                    leading_colon: false,
+                    segments: [
+                        PathSegment {
+                            ident: "std",
+                            generics: [],
+                        },
+                        PathSegment {
+                            ident: "fmt",
+                            generics: [],
+                        },
+                        PathSegment {
+                            ident: "Display",
+                            generics: [],
+                        },
+                    ],
+                    alias: None,
+                },
+                span: Span {
+                    file: FileId(
+                        0,
+                    ),
+                    start: Position {
+                        offset: 56,
+                        line: 3,
+                        column: 1,
+                    },
+                    end: Position {
+                        offset: 59,
+                        line: 3,
+                        column: 4,
+                    },
+                    line: 3,
+                    column: 1,
+                },
+                id: NodeId(
+                    3,
+                ),
+            },
+        ),
+        Function(
+            FunctionDecl {
+                attributes: [],
+                docs: [],
+                visibility: Private,
+                signature: FunctionSig {
+                    constness: false,
+                    asyncness: false,
+                    name: "log_info",
+                    generics: GenericParams {
+                        params: [],
+                    },
+                    params: [
+                        Param {
+                            name: "message",
+                            ty: Path(
+                                PathType {
+                                    leading_colon: false,
+                                    segments: [
+                                        PathSegment {
+                                            ident: "String",
+                                            generics: [],
+                                        },
+                                    ],
+                                },
+                            ),
+                        },
+                    ],
+                    return_type: Some(
+                        Path(
+                            PathType {
+                                leading_colon: false,
+                                segments: [
+                                    PathSegment {
+                                        ident: "Unit",
+                                        generics: [],
+                                    },
+                                ],
+                            },
+                        ),
+                    ),
+                    effect: Some(
+                        EffectExpr {
+                            labels: [
+                                EffectLabel {
+                                    name: "IO",
+                                    args: [],
+                                },
+                            ],
+                            tail: None,
+                        },
+                    ),
+                    where_clause: [],
+                },
+                body: Block {
+                    statements: [
+                        Expr(
+                            Expr {
+                                kind: Call {
+                                    callee: Expr {
+                                        kind: Path(
+                                            PathExpr {
+                                                leading_colon: false,
+                                                segments: [
+                                                    PathSegment {
+                                                        ident: "println",
+                                                        generics: [],
+                                                    },
+                                                ],
+                                                span: Span {
+                                                    file: FileId(
+                                                        0,
+                                                    ),
+                                                    start: Position {
+                                                        offset: 130,
+                                                        line: 6,
+                                                        column: 5,
+                                                    },
+                                                    end: Position {
+                                                        offset: 137,
+                                                        line: 6,
+                                                        column: 12,
+                                                    },
+                                                    line: 6,
+                                                    column: 5,
+                                                },
+                                            },
+                                        ),
+                                        span: Span {
+                                            file: FileId(
+                                                0,
+                                            ),
+                                            start: Position {
+                                                offset: 130,
+                                                line: 6,
+                                                column: 5,
+                                            },
+                                            end: Position {
+                                                offset: 137,
+                                                line: 6,
+                                                column: 12,
+                                            },
+                                            line: 6,
+                                            column: 5,
+                                        },
+                                    },
+                                    args: [
+                                        Expr {
+                                            kind: Path(
+                                                PathExpr {
+                                                    leading_colon: false,
+                                                    segments: [
+                                                        PathSegment {
+                                                            ident: "message",
+                                                            generics: [],
+                                                        },
+                                                    ],
+                                                    span: Span {
+                                                        file: FileId(
+                                                            0,
+                                                        ),
+                                                        start: Position {
+                                                            offset: 138,
+                                                            line: 6,
+                                                            column: 13,
+                                                        },
+                                                        end: Position {
+                                                            offset: 145,
+                                                            line: 6,
+                                                            column: 20,
+                                                        },
+                                                        line: 6,
+                                                        column: 13,
+                                                    },
+                                                },
+                                            ),
+                                            span: Span {
+                                                file: FileId(
+                                                    0,
+                                                ),
+                                                start: Position {
+                                                    offset: 138,
+                                                    line: 6,
+                                                    column: 13,
+                                                },
+                                                end: Position {
+                                                    offset: 145,
+                                                    line: 6,
+                                                    column: 20,
+                                                },
+                                                line: 6,
+                                                column: 13,
+                                            },
+                                        },
+                                    ],
+                                },
+                                span: Span {
+                                    file: FileId(
+                                        0,
+                                    ),
+                                    start: Position {
+                                        offset: 130,
+                                        line: 6,
+                                        column: 5,
+                                    },
+                                    end: Position {
+                                        offset: 146,
+                                        line: 6,
+                                        column: 21,
+                                    },
+                                    line: 6,
+                                    column: 5,
+                                },
+                            },
+                            Span {
+                                file: FileId(
+                                    0,
+                                ),
+                                start: Position {
+                                    offset: 130,
+                                    line: 6,
+                                    column: 5,
+                                },
+                                end: Position {
+                                    offset: 147,
+                                    line: 6,
+                                    column: 22,
+                                },
+                                line: 6,
+                                column: 5,
+                            },
+                        ),
+                    ],
+                    tail: None,
+                    span: Span {
+                        file: FileId(
+                            0,
+                        ),
+                        start: Position {
+                            offset: 124,
+                            line: 5,
+                            column: 45,
+                        },
+                        end: Position {
+                            offset: 149,
+                            line: 7,
+                            column: 2,
+                        },
+                        line: 5,
+                        column: 45,
+                    },
+                },
+                span: Span {
+                    file: FileId(
+                        0,
+                    ),
+                    start: Position {
+                        offset: 80,
+                        line: 5,
+                        column: 1,
+                    },
+                    end: Position {
+                        offset: 82,
+                        line: 5,
+                        column: 3,
+                    },
+                    line: 5,
+                    column: 1,
+                },
+                id: NodeId(
+                    4,
+                ),
+            },
+        ),
+        Function(
+            FunctionDecl {
+                attributes: [
+                    Attribute {
+                        name: "zone",
+                        args: [
+                            Expr(
+                                Expr {
+                                    kind: Path(
+                                        PathExpr {
+                                            leading_colon: false,
+                                            segments: [
+                                                PathSegment {
+                                                    ident: "realtime",
+                                                    generics: [],
+                                                },
+                                            ],
+                                            span: Span {
+                                                file: FileId(
+                                                    0,
+                                                ),
+                                                start: Position {
+                                                    offset: 157,
+                                                    line: 9,
+                                                    column: 7,
+                                                },
+                                                end: Position {
+                                                    offset: 165,
+                                                    line: 9,
+                                                    column: 15,
+                                                },
+                                                line: 9,
+                                                column: 7,
+                                            },
+                                        },
+                                    ),
+                                    span: Span {
+                                        file: FileId(
+                                            0,
+                                        ),
+                                        start: Position {
+                                            offset: 157,
+                                            line: 9,
+                                            column: 7,
+                                        },
+                                        end: Position {
+                                            offset: 165,
+                                            line: 9,
+                                            column: 15,
+                                        },
+                                        line: 9,
+                                        column: 7,
+                                    },
+                                },
+                            ),
+                        ],
+                        span: Span {
+                            file: FileId(
+                                0,
+                            ),
+                            start: Position {
+                                offset: 151,
+                                line: 9,
+                                column: 1,
+                            },
+                            end: Position {
+                                offset: 152,
+                                line: 9,
+                                column: 2,
+                            },
+                            line: 9,
+                            column: 1,
+                        },
+                    },
+                ],
+                docs: [],
+                visibility: Pub,
+                signature: FunctionSig {
+                    constness: false,
+                    asyncness: true,
+                    name: "run",
+                    generics: GenericParams {
+                        params: [
+                            GenericParam {
+                                name: "T",
+                                kind: Type {
+                                    bounds: [
+                                        PathType {
+                                            leading_colon: false,
+                                            segments: [
+                                                PathSegment {
+                                                    ident: "Display",
+                                                    generics: [],
+                                                },
+                                            ],
+                                        },
+                                    ],
+                                },
+                            },
+                        ],
+                    },
+                    params: [
+                        Param {
+                            name: "inbox",
+                            ty: Path(
+                                PathType {
+                                    leading_colon: false,
+                                    segments: [
+                                        PathSegment {
+                                            ident: "Inbox",
+                                            generics: [
+                                                Path(
+                                                    PathType {
+                                                        leading_colon: false,
+                                                        segments: [
+                                                            PathSegment {
+                                                                ident: "T",
+                                                                generics: [],
+                                                            },
+                                                        ],
+                                                    },
+                                                ),
+                                            ],
+                                        },
+                                    ],
+                                },
+                            ),
+                        },
+                    ],
+                    return_type: Some(
+                        Path(
+                            PathType {
+                                leading_colon: false,
+                                segments: [
+                                    PathSegment {
+                                        ident: "Unit",
+                                        generics: [],
+                                    },
+                                ],
+                            },
+                        ),
+                    ),
+                    effect: Some(
+                        EffectExpr {
+                            labels: [
+                                EffectLabel {
+                                    name: "IO",
+                                    args: [],
+                                },
+                            ],
+                            tail: None,
+                        },
+                    ),
+                    where_clause: [
+                        Bound {
+                            target: Path(
+                                PathType {
+                                    leading_colon: false,
+                                    segments: [
+                                        PathSegment {
+                                            ident: "T",
+                                            generics: [],
+                                        },
+                                    ],
+                                },
+                            ),
+                            bounds: [
+                                PathType {
+                                    leading_colon: false,
+                                    segments: [
+                                        PathSegment {
+                                            ident: "Send",
+                                            generics: [],
+                                        },
+                                    ],
+                                },
+                            ],
+                        },
+                    ],
+                },
+                body: Block {
+                    statements: [
+                        Let {
+                            pattern: Ident(
+                                "_message",
+                            ),
+                            ty: None,
+                            value: Some(
+                                Expr {
+                                    kind: Await(
+                                        Expr {
+                                            kind: MethodCall {
+                                                receiver: Expr {
+                                                    kind: Path(
+                                                        PathExpr {
+                                                            leading_colon: false,
+                                                            segments: [
+                                                                PathSegment {
+                                                                    ident: "inbox",
+                                                                    generics: [],
+                                                                },
+                                                            ],
+                                                            span: Span {
+                                                                file: FileId(
+                                                                    0,
+                                                                ),
+                                                                start: Position {
+                                                                    offset: 263,
+                                                                    line: 11,
+                                                                    column: 20,
+                                                                },
+                                                                end: Position {
+                                                                    offset: 268,
+                                                                    line: 11,
+                                                                    column: 25,
+                                                                },
+                                                                line: 11,
+                                                                column: 20,
+                                                            },
+                                                        },
+                                                    ),
+                                                    span: Span {
+                                                        file: FileId(
+                                                            0,
+                                                        ),
+                                                        start: Position {
+                                                            offset: 263,
+                                                            line: 11,
+                                                            column: 20,
+                                                        },
+                                                        end: Position {
+                                                            offset: 268,
+                                                            line: 11,
+                                                            column: 25,
+                                                        },
+                                                        line: 11,
+                                                        column: 20,
+                                                    },
+                                                },
+                                                method: "recv",
+                                                turbofish: [],
+                                                args: [],
+                                            },
+                                            span: Span {
+                                                file: FileId(
+                                                    0,
+                                                ),
+                                                start: Position {
+                                                    offset: 263,
+                                                    line: 11,
+                                                    column: 20,
+                                                },
+                                                end: Position {
+                                                    offset: 275,
+                                                    line: 11,
+                                                    column: 32,
+                                                },
+                                                line: 11,
+                                                column: 20,
+                                            },
+                                        },
+                                    ),
+                                    span: Span {
+                                        file: FileId(
+                                            0,
+                                        ),
+                                        start: Position {
+                                            offset: 263,
+                                            line: 11,
+                                            column: 20,
+                                        },
+                                        end: Position {
+                                            offset: 281,
+                                            line: 11,
+                                            column: 38,
+                                        },
+                                        line: 11,
+                                        column: 20,
+                                    },
+                                },
+                            ),
+                            span: Span {
+                                file: FileId(
+                                    0,
+                                ),
+                                start: Position {
+                                    offset: 248,
+                                    line: 11,
+                                    column: 5,
+                                },
+                                end: Position {
+                                    offset: 282,
+                                    line: 11,
+                                    column: 39,
+                                },
+                                line: 11,
+                                column: 5,
+                            },
+                        },
+                        Expr(
+                            Expr {
+                                kind: Call {
+                                    callee: Expr {
+                                        kind: Path(
+                                            PathExpr {
+                                                leading_colon: false,
+                                                segments: [
+                                                    PathSegment {
+                                                        ident: "log_info",
+                                                        generics: [],
+                                                    },
+                                                ],
+                                                span: Span {
+                                                    file: FileId(
+                                                        0,
+                                                    ),
+                                                    start: Position {
+                                                        offset: 287,
+                                                        line: 12,
+                                                        column: 5,
+                                                    },
+                                                    end: Position {
+                                                        offset: 295,
+                                                        line: 12,
+                                                        column: 13,
+                                                    },
+                                                    line: 12,
+                                                    column: 5,
+                                                },
+                                            },
+                                        ),
+                                        span: Span {
+                                            file: FileId(
+                                                0,
+                                            ),
+                                            start: Position {
+                                                offset: 287,
+                                                line: 12,
+                                                column: 5,
+                                            },
+                                            end: Position {
+                                                offset: 295,
+                                                line: 12,
+                                                column: 13,
+                                            },
+                                            line: 12,
+                                            column: 5,
+                                        },
+                                    },
+                                    args: [
+                                        Expr {
+                                            kind: Call {
+                                                callee: Expr {
+                                                    kind: Path(
+                                                        PathExpr {
+                                                            leading_colon: false,
+                                                            segments: [
+                                                                PathSegment {
+                                                                    ident: "String",
+                                                                    generics: [],
+                                                                },
+                                                                PathSegment {
+                                                                    ident: "from",
+                                                                    generics: [],
+                                                                },
+                                                            ],
+                                                            span: Span {
+                                                                file: FileId(
+                                                                    0,
+                                                                ),
+                                                                start: Position {
+                                                                    offset: 296,
+                                                                    line: 12,
+                                                                    column: 14,
+                                                                },
+                                                                end: Position {
+                                                                    offset: 308,
+                                                                    line: 12,
+                                                                    column: 26,
+                                                                },
+                                                                line: 12,
+                                                                column: 14,
+                                                            },
+                                                        },
+                                                    ),
+                                                    span: Span {
+                                                        file: FileId(
+                                                            0,
+                                                        ),
+                                                        start: Position {
+                                                            offset: 296,
+                                                            line: 12,
+                                                            column: 14,
+                                                        },
+                                                        end: Position {
+                                                            offset: 308,
+                                                            line: 12,
+                                                            column: 26,
+                                                        },
+                                                        line: 12,
+                                                        column: 14,
+                                                    },
+                                                },
+                                                args: [
+                                                    Expr {
+                                                        kind: Literal(
+                                                            String(
+                                                                "received",
+                                                            ),
+                                                        ),
+                                                        span: Span {
+                                                            file: FileId(
+                                                                0,
+                                                            ),
+                                                            start: Position {
+                                                                offset: 309,
+                                                                line: 12,
+                                                                column: 27,
+                                                            },
+                                                            end: Position {
+                                                                offset: 319,
+                                                                line: 12,
+                                                                column: 37,
+                                                            },
+                                                            line: 12,
+                                                            column: 27,
+                                                        },
+                                                    },
+                                                ],
+                                            },
+                                            span: Span {
+                                                file: FileId(
+                                                    0,
+                                                ),
+                                                start: Position {
+                                                    offset: 296,
+                                                    line: 12,
+                                                    column: 14,
+                                                },
+                                                end: Position {
+                                                    offset: 320,
+                                                    line: 12,
+                                                    column: 38,
+                                                },
+                                                line: 12,
+                                                column: 14,
+                                            },
+                                        },
+                                    ],
+                                },
+                                span: Span {
+                                    file: FileId(
+                                        0,
+                                    ),
+                                    start: Position {
+                                        offset: 287,
+                                        line: 12,
+                                        column: 5,
+                                    },
+                                    end: Position {
+                                        offset: 321,
+                                        line: 12,
+                                        column: 39,
+                                    },
+                                    line: 12,
+                                    column: 5,
+                                },
+                            },
+                            Span {
+                                file: FileId(
+                                    0,
+                                ),
+                                start: Position {
+                                    offset: 287,
+                                    line: 12,
+                                    column: 5,
+                                },
+                                end: Position {
+                                    offset: 322,
+                                    line: 12,
+                                    column: 40,
+                                },
+                                line: 12,
+                                column: 5,
+                            },
+                        ),
+                        Return {
+                            value: Some(
+                                Expr {
+                                    kind: Literal(
+                                        Unit,
+                                    ),
+                                    span: Span {
+                                        file: FileId(
+                                            0,
+                                        ),
+                                        start: Position {
+                                            offset: 334,
+                                            line: 13,
+                                            column: 12,
+                                        },
+                                        end: Position {
+                                            offset: 336,
+                                            line: 13,
+                                            column: 14,
+                                        },
+                                        line: 13,
+                                        column: 12,
+                                    },
+                                },
+                            ),
+                            span: Span {
+                                file: FileId(
+                                    0,
+                                ),
+                                start: Position {
+                                    offset: 327,
+                                    line: 13,
+                                    column: 5,
+                                },
+                                end: Position {
+                                    offset: 337,
+                                    line: 13,
+                                    column: 15,
+                                },
+                                line: 13,
+                                column: 5,
+                            },
+                        },
+                    ],
+                    tail: None,
+                    span: Span {
+                        file: FileId(
+                            0,
+                        ),
+                        start: Position {
+                            offset: 242,
+                            line: 10,
+                            column: 76,
+                        },
+                        end: Position {
+                            offset: 339,
+                            line: 14,
+                            column: 2,
+                        },
+                        line: 10,
+                        column: 76,
+                    },
+                },
+                span: Span {
+                    file: FileId(
+                        0,
+                    ),
+                    start: Position {
+                        offset: 177,
+                        line: 10,
+                        column: 11,
+                    },
+                    end: Position {
+                        offset: 179,
+                        line: 10,
+                        column: 13,
+                    },
+                    line: 10,
+                    column: 11,
+                },
+                id: NodeId(
+                    5,
+                ),
+            },
+        ),
+    ],
+}

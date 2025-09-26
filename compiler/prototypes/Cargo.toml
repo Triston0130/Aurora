@@ -1,0 +1,15 @@
+[package]
+name = "aurora-compiler-prototypes"
+version = "0.1.0"
+edition = "2021"
+authors = ["Aurora Research Team"]
+description = "Prototype implementations for Aurora compiler components"
+license = "Apache-2.0"
+
+[dependencies]
+thiserror = "1.0"
+aurora-effect-solver = { path = "../effect-solver" }
+blake3 = "1.5"
+
+[dev-dependencies]
+insta = { version = "1.38", default-features = false, features = ["yaml"] }

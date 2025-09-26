@@ -1,0 +1,13 @@
+[package]
+name = "aurora-runtime-ffi"
+version = "0.1.0"
+edition = "2021"
+authors = ["Aurora Research Team"]
+description = "Foreign Function Interface helpers for the Aurora runtime"
+license = "Apache-2.0"
+
+[dependencies]
+aurora-runtime-scheduler = { path = "../scheduler" }
+aurora-zone-manager = { path = "../zone_manager" }
+libloading = "0.8"
+parking_lot = "0.12"

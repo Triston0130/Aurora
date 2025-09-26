@@ -1,0 +1,14 @@
+use runtime::actors::Actor;
+use runtime::actors::Inbox;
+use std::fmt::Display;
+
+fn log_info(message: String) -> Unit ! <IO> {
+    println(message);
+}
+
+@zone(realtime)
+pub async fn run<T: Display>(inbox: Inbox<T>) -> Unit ! <IO> where T: Send {
+    let _message = inbox.recv().await;
+    log_info(String::from("received"));
+    return ();
+}

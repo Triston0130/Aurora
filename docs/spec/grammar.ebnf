@@ -1,0 +1,183 @@
+(* Aurora Grammar — EBNF Draft v0.1 *)
+(* Tokens upper case denote lexical categories from the LRM. *)
+
+CompilationUnit = { Item } EOF ;
+
+Item = AttributeSeq? (ModuleDecl | UseDecl | FunctionDecl | StructDecl | EnumDecl | TraitDecl | ImplDecl | ExternBlock | ZoneDecl) ;
+
+AttributeSeq = { Attribute } ;
+Attribute = "@" IDENTIFIER ( "(" [ AttributeArg { "," AttributeArg } ] ")" )? ;
+AttributeArg = IDENTIFIER [ "=" AttributeValue ] | LITERAL ;
+AttributeValue = IDENTIFIER | LITERAL ;
+
+ModuleDecl = "mod" IDENTIFIER ( ";" | "{" { Item } "}" ) ;
+UseDecl = "use" UseTree ";" ;
+UseTree = "::"? UseTreeSuffix ;
+UseTreeSuffix = UseSimple | UseGlob | UseGroup ;
+UseSimple = UsePath [ "as" IDENTIFIER ] ;
+UseGlob = UsePath "::" "*" ;
+UseGroup = [ UsePath "::" ] "{" UseTree { "," UseTree } [ "," ] "}" ;
+UsePath = UseSegment { "::" UseSegment } ;
+UseSegment = "crate" | "self" | "super" | IDENTIFIER ;
+
+ZoneDecl = "zone" IDENTIFIER ZoneArgs Block ;
+ZoneArgs = "(" [ ZoneArg { "," ZoneArg } ] ")" | ;
+ZoneArg = IDENTIFIER "=" Expression ;
+
+FunctionDecl = Visibility? "fn" IDENTIFIER GenericParams? "(" ParameterList? ")" ReturnType? EffectClause? WhereClause? Block ;
+Visibility = "pub" [ "(" ( "crate" | "self" | "super" | UsePath ) ")" ] ;
+GenericParams = "<" GenericParam { "," GenericParam } ">" ;
+GenericParam = IDENTIFIER [ ":" TraitBounds ] | "const" IDENTIFIER ":" Type | "lifetimes" ;
+ParameterList = Parameter { "," Parameter } ;
+Parameter = Pattern ":" Type ;
+ReturnType = "->" Type ;
+EffectClause = "!" EffectRow ;
+WhereClause = "where" WherePredicate { "," WherePredicate } ;
+WherePredicate = Type "::" IDENTIFIER "=" Type | Type ":" TraitBounds ;
+TraitBounds = TraitRef { "+" TraitRef } ;
+TraitRef = Path [ "<" Type { "," Type } ">" ] ;
+
+StructDecl = Visibility? "struct" IDENTIFIER GenericParams? StructBody WhereClause? ;
+StructBody = "{" StructFieldList? "}" | TupleStructBody ";" ;
+StructFieldList = StructField { "," StructField } [ "," ] ;
+StructField = Visibility? IDENTIFIER ":" Type ;
+TupleStructBody = "(" TupleField { "," TupleField } ")" ;
+TupleField = Visibility? Type ;
+
+EnumDecl = Visibility? "enum" IDENTIFIER GenericParams? "{" EnumVariantList? "}" WhereClause? ;
+EnumVariantList = EnumVariant { "," EnumVariant } [ "," ] ;
+EnumVariant = IDENTIFIER ( StructBody | TupleStructBody | ) [ "=" Expression ] ;
+
+TraitDecl = Visibility? "trait" IDENTIFIER GenericParams? TraitSuper? "{" TraitItemList? "}" ;
+TraitSuper = ":" TraitBounds ;
+TraitItemList = TraitItem { TraitItem } ;
+TraitItem = AttributeSeq? ( "type" IDENTIFIER ";" | "effect" IDENTIFIER "=" EffectRow ";" | FnSig ";" | FnSig Block ) ;
+FnSig = "fn" IDENTIFIER GenericParams? "(" ParameterList? ")" ReturnType? EffectClause? WhereClause? ;
+
+ImplDecl = AttributeSeq? "impl" ImplHead ImplBody ;
+ImplHead = GenericParams? TraitRef? "for" Type WhereClause? ;
+ImplBody = "{" ImplItemList? "}" ;
+ImplItemList = ImplItem { ImplItem } ;
+ImplItem = AttributeSeq? ( FnSig Block | "type" IDENTIFIER "=" Type ";" | "effect" IDENTIFIER "=" EffectRow ";" ) ;
+
+ExternBlock = "extern" [ STRING_LITERAL ] "{" { ExternItem } "}" ;
+ExternItem = AttributeSeq? ( FnSig ";" | StaticDecl ";" ) ;
+StaticDecl = Visibility? "static" IDENTIFIER ":" Type ;
+
+Block = "{" StatementList? "}" ;
+StatementList = Statement { Statement } ;
+Statement = LetStmt | Item | ExpressionStmt ;
+LetStmt = "let" Pattern TypeAnnotation? Initializer? ";" ;
+TypeAnnotation = ":" Type ;
+Initializer = "=" Expression ;
+ExpressionStmt = Expression ";" | BlockExpression ;
+BlockExpression = Block ;
+
+Pattern = PatternNoAlt { "|" PatternNoAlt } ;
+PatternNoAlt = BindingPattern | PrefixPattern ;
+BindingPattern = ["move"] ["mut"] IDENTIFIER ("@" PatternNoAlt)?
+               | ["move"] IDENTIFIER "@" PatternNoAlt
+               | PrefixPattern ;
+PrefixPattern = "move" PatternNoAlt
+              | ReferencePattern
+              | PrimaryPattern ;
+PrimaryPattern = "_"
+               | IDENTIFIER
+               | LiteralPattern
+               | TuplePattern
+               | StructPattern
+               | EnumPattern
+               | SlicePattern ;
+LiteralPattern = LITERAL ;
+TuplePattern = "(" [ Pattern { "," Pattern } [ "," ] ] ")" ;
+StructPattern = Path "{" FieldPatternList? "}" ;
+FieldPatternList = FieldPattern { "," FieldPattern } [ "," ] ;
+FieldPattern = IDENTIFIER ":" Pattern | ".." ;
+EnumPattern = Path ( TuplePattern | StructPattern | ) ;
+ReferencePattern = "&" "mut"? PatternNoAlt ;
+SlicePattern = "["
+               [ Pattern { "," Pattern } ]
+               [ "," ".." [ Pattern ] ]
+               [ "," Pattern { "," Pattern } ]
+               "]" ;
+
+Expression = LambdaExpr ;
+LambdaExpr = "||" Block | "|" ParamPatternList "|" Block | AssignmentExpr ;
+ParamPatternList = Pattern { "," Pattern } ;
+AssignmentExpr = ConditionalExpr { AssignmentOp ConditionalExpr } ;
+AssignmentOp = "=" | "+=" | "-=" | "*=" | "/=" | "%=" ;
+ConditionalExpr = CoalesceExpr [ "?" Expression ":" Expression ] ;
+CoalesceExpr = OrExpr [ "??" CoalesceExpr ] ;
+OrExpr = AndExpr { "||" AndExpr } ;
+AndExpr = EqualityExpr { "&&" EqualityExpr } ;
+EqualityExpr = RelationalExpr { ("==" | "!=") RelationalExpr } ;
+RelationalExpr = AdditiveExpr { ("<" | "<=" | ">" | ">=" | "in") AdditiveExpr } ;
+AdditiveExpr = MultiplicativeExpr { ("+" | "-") MultiplicativeExpr } ;
+MultiplicativeExpr = UnaryExpr { ("*" | "/" | "%") UnaryExpr } ;
+UnaryExpr = ("!" | "-" | "*" | "&" "mut"? | "spawn") UnaryExpr | AwaitExpr ;
+AwaitExpr = PostfixExpr [ "await" ] ;
+PostfixExpr = PrimaryExpr { PostfixOp } ;
+PostfixOp = CallExpr | MethodCall | FieldAccess | IndexExpr | ZoneEnter ;
+CallExpr = "(" [ ArgumentList ] ")" ;
+ArgumentList = Expression { "," Expression } [ "," ] ;
+MethodCall = "." IDENTIFIER GenericArgs? CallExpr ;
+FieldAccess = "." IDENTIFIER ;
+IndexExpr = "[" Expression "]" ;
+ZoneEnter = "zone" IDENTIFIER ZoneArgs ;
+GenericArgs = "::<" Type { "," Type } ">" ;
+
+PrimaryExpr = Literal
+            | IDENTIFIER
+            | PathExpr
+            | TupleExpr
+            | StructExpr
+            | ArrayExpr
+            | Block
+            | "if" Expression Block [ "else" (Block | PrimaryExpr) ]
+            | "match" Expression "{" MatchArmList "}"
+            | "while" Expression Block
+            | "loop" Block
+            | "for" Pattern "in" Expression Block
+            | "async" Block
+            | "actor" ActorLiteral
+            | "zone" IDENTIFIER ZoneArgs Block
+            | "return" Expression?
+            | "break" Expression?
+            | "continue"
+            | "move" Expression ;
+
+PathExpr = Path ;
+Path = ("::" | PathSegment) { "::" PathSegment } ;
+PathSegment = IDENTIFIER [ GenericArgs ] ;
+
+TupleExpr = "(" [ Expression { "," Expression } [ "," ] ] ")" ;
+StructExpr = Path "{" StructExprFieldList? "}" ;
+StructExprFieldList = StructExprField { "," StructExprField } [ "," ] ;
+StructExprField = IDENTIFIER ":" Expression | ".." Expression ;
+ArrayExpr = "[" ( Expression { "," Expression } [ "," ] | Expression ";" Expression ) "]" ;
+
+MatchArmList = MatchArm { "," MatchArm } [ "," ] ;
+MatchArm = Pattern [ "if" Expression ] "=>" Expression ;
+
+ActorLiteral = Path "{" ActorFieldList? "}" ;
+ActorFieldList = ActorField { "," ActorField } [ "," ] ;
+ActorField = IDENTIFIER ":" Expression ;
+
+Type = FunctionType ;
+FunctionType = TraitObjectType | Lifetime | "fn" "(" TypeList? ")" EffectClause? "->" Type | BorrowType ;
+TypeList = TypeArgument { "," TypeArgument } [ "," ] ;
+TypeArgument = Type | Lifetime ;
+BorrowType = ReferenceType | RawPointerType | ArrayType | TupleType | PathType ;
+ReferenceType = "&" Lifetime? "mut"? Type ;
+RawPointerType = "*" ("const" | "mut") Type ;
+ArrayType = "[" Type ";" Expression "]" | "[" Type "]" ;
+TupleType = "(" [ Type { "," Type } [ "," ] ] ")" ;
+PathType = Path ;
+TraitObjectType = "dyn" TraitBounds ;
+Lifetime = "'" IDENTIFIER | "'static" ;
+
+EffectRow = "<" [ EffectLabel { "," EffectLabel } [ "|" RowVar ] | RowVar ] ">" ;
+EffectLabel = IDENTIFIER [ "(" Expression { "," Expression } ")" ] ;
+RowVar = IDENTIFIER ;
+
+Literal = LITERAL ;

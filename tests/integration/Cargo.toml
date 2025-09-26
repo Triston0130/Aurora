@@ -1,0 +1,15 @@
+[package]
+name = "aurora-integration-tests"
+version = "0.1.0"
+edition = "2021"
+authors = ["Aurora Research Team"]
+publish = false
+
+[dependencies]
+aurora-stdlib = { path = "../../stdlib/core" }
+aurora-zone-manager = { path = "../../runtime/zone_manager" }
+aurora-runtime-ffi = { path = "../../runtime/ffi" }
+aurora-runtime-io = { path = "../../runtime/io" }
+aurora-runtime-scheduler = { path = "../../runtime/scheduler" }
+crossbeam-channel = "0.5"
+libloading = "0.8"

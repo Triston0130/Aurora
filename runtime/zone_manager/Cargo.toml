@@ -1,0 +1,12 @@
+[package]
+name = "aurora-zone-manager"
+version = "0.1.0"
+edition = "2021"
+authors = ["Aurora Research Team"]
+description = "Zone orchestration services built on the Aurora runtime scheduler"
+license = "Apache-2.0"
+
+[dependencies]
+aurora-runtime-scheduler = { path = "../scheduler" }
+aurora-runtime-memory = { path = "../memory" }
+crossbeam-channel = "0.5"
